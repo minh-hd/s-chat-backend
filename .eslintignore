@@ -1,0 +1,5 @@
+# JSON Files
+*.json
+
+# Dependency packages
+/node_modules

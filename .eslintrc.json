@@ -1,0 +1,25 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "windows"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "no-trailing-spaces": "error",
+    "comma-dangle": "error",
+    "max-params": ["error", 3],
+    "no-const-assign": "error",
+    "array-bracket-spacing": ["error", ""],
+    "object-curly-spacing": ["error", "always"],
+    "semi-style": ["error", "always"]
+  }
+}
