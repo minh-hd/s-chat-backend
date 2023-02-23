@@ -20,6 +20,7 @@
     "no-const-assign": "error",
     "array-bracket-spacing": ["error", ""],
     "object-curly-spacing": ["error", "always"],
-    "semi-style": ["error", "always"]
+    "semi-style": ["error", "always"],
+    "no-var": "error"
   }
 }
