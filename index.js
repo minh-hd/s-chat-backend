@@ -3,7 +3,9 @@ import http from 'http';
 import dotenv from 'dotenv';
 import logger from 'morgan';
 import cors from 'cors';
+import { Server } from 'socket.io';
 
+// DATABASE
 import './config/mongo.js';
 
 // ROUTES
@@ -11,6 +13,10 @@ import indexRouter from './routes/index.route.js';
 import userRouter from './routes/user.route.js';
 import chatRoomRouter from './routes/chatRoom.route.js';
 import deleteRouter from './routes/delete.route.js';
+import swaggerRouter from './routes/swagger.route.js';
+
+// SOCKETS
+import WebSockets from './utils/WebSockets.js';
 
 import { decode } from './middlewares/jwt.js';
 
@@ -34,6 +40,7 @@ app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/room', decode, chatRoomRouter);
 app.use('/delete', deleteRouter);
+app.use('/api-docs', swaggerRouter);
 
 /** catch 404 and forward to error handler */
 app.use('*', (req, res) => {
@@ -50,3 +57,6 @@ server.listen(port);
 server.on('listening', () =>
   console.log(`Listening on port:: http://localhost:${port}/`)
 );
+
+global.io = new Server(server);
+global.io.on('connection', WebSockets.connection);
