@@ -3,8 +3,30 @@ import makeValidation from '@withvoid/make-validation';
 import userService from '../services/user.service.js';
 
 export default {
-  onGetAllUsers: async (req, res) => {},
-  onGetUserById: async (req, res) => {},
+  onGetAllUsers: async (req, res) => {
+    try {
+      const users = await userService.findUsers();
+
+      return res.status(200).json({ success: true, users });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  },
+  onGetUserById: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const user = await userService.findUserById(id);
+
+      if (!user) {
+        throw new Error('No user with this id found');
+      }
+
+      return res.status(200).json({ success: true, user });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  },
   onCreateUser: async (req, res) => {
     try {
       const validation = makeValidation((types) => ({
@@ -32,7 +54,7 @@ export default {
 
       return res.status(200).json({ success: true, user });
     } catch (error) {
-      return res.status(500).json({ success: false, error: error });
+      return res.status(500).json({ success: false, error: error.message });
     }
   },
   onDeleteUserById: async (req, res) => {}
