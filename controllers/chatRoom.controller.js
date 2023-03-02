@@ -60,7 +60,7 @@ export default {
         currentLoggedUser
       );
 
-      global.io.sockets.emit('new message', { message: post });
+      global.io.sockets.in(roomId).emit('new message', { message: post });
 
       return res.status(200).json({ success: true, post });
     } catch (error) {
