@@ -20,7 +20,7 @@ class WebSockets {
     });
 
     // subscribe person to chat & other user as well
-    client.on('subscribe', () => {
+    client.on('subscribe', (room) => {
       this.subscribeOtherUser(room, otherUserId);
       client.join(room);
     });
