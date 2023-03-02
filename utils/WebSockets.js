@@ -4,6 +4,10 @@ class WebSockets {
   connection(client) {
     // event fired when the chat room is disconnected
     client.on('disconnect', () => {
+      if (!this.users) {
+        return;
+      }
+
       this.users = this.users.filter((user) => user.socketId !== client.id);
     });
 
@@ -16,7 +20,10 @@ class WebSockets {
     });
 
     // subscribe person to chat & other user as well
-    client.on('subscribe', () => {});
+    client.on('subscribe', () => {
+      this.subscribeOtherUser(room, otherUserId);
+      client.join(room);
+    });
 
     // mute a chat room
     client.on('unsubscribe', (room) => {
