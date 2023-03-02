@@ -47,7 +47,9 @@ async function checkUserCredentials(username, password) {
     throw new Error('No user found with this username');
   }
 
-  return bcrypt.compareSync(password, existedUser.password);
+  const isPasswordMatch = bcrypt.compareSync(password, existedUser.password);
+
+  return isPasswordMatch ? existedUser : null;
 }
 
 /**
@@ -59,7 +61,7 @@ async function findUserByUsername(username) {
   const user = await userModel.findOne({ username }).exec();
 
   if (!user) {
-    return false;
+    return null;
   }
 
   return user;
@@ -77,7 +79,7 @@ async function findUserById(id) {
     .exec();
 
   if (!user) {
-    return false;
+    return null;
   }
 
   return user;

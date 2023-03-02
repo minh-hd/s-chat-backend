@@ -3,7 +3,7 @@ import makeValidation from '@withvoid/make-validation';
 
 import userService from '../services/user.service.js';
 
-const SECRET_KEY = 'some-secret-key';
+const SECRET_KEY = 'very-secret-key';
 
 export const decode = (req, res, next) => {
   if (!req.headers['authorization']) {
