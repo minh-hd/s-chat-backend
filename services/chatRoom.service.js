@@ -22,6 +22,13 @@ async function findAvailableRoom(userIds) {
   return availableRoom;
 }
 
+/**
+ *
+ * @param {*} userIds
+ * @param {*} type
+ * @param {*} chatInitiator
+ * @returns
+ */
 async function initiateChat(userIds, type, chatInitiator) {
   const availableRoom = await findAvailableRoom(userIds);
 
@@ -48,7 +55,23 @@ async function initiateChat(userIds, type, chatInitiator) {
   };
 }
 
+/**
+ *
+ * @param {*} roomId
+ * @returns
+ */
+async function findRoomById(roomId) {
+  const room = await chatRoomModel.findOne({ _id: roomId }).exec();
+
+  return room ? null : room;
+}
+
+// async function findConversationByRoom(roomId) {
+//   const room = await chatRoomModel.fin
+// }
+
 export default {
   findAvailableRoom,
+  findRoomById,
   initiateChat
 };

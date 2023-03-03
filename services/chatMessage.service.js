@@ -69,6 +69,28 @@ async function createPostInChatRoom(chatRoomId, message, postedByUser) {
   return aggregate[0];
 }
 
+async function markMessageAsRead(chatRoomId, currentUserOnlineId) {
+  return chatMessageModel.updateMany(
+    {
+      chatRoomId,
+      'readByRecipients.readByUserId': {
+        $ne: currentUserOnlineId
+      }
+    },
+    {
+      $addToSet: {
+        readByRecipients: {
+          readByUserId: currentUserOnlineId
+        }
+      }
+    },
+    {
+      multi: true
+    }
+  );
+}
+
 export default {
-  createPostInChatRoom
+  createPostInChatRoom,
+  markMessageAsRead
 };

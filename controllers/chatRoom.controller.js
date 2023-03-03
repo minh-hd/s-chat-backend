@@ -49,6 +49,42 @@ export default {
         return res.status(400).json({ ...validation });
       }
 
+      const { userId: currentLoggedUser } = req;
+
+      const readResult = await chatMessageService.markMessageAsRead(
+        roomId,
+        currentLoggedUser
+      );
+
+      global.io.sockets
+        .in(roomId)
+        .emit('read message', { message: readResult });
+
+      return res.status(200).json({ success: true, readResult });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  },
+  getRecentConversation: async (req, res) => {},
+  getConversationByRoomId: async (req, res) => {
+    try {
+      const { roomId } = req.params;
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  },
+  markConversationReadByRoomId: async (req, res) => {
+    try {
+      const { roomId } = req.params;
+      const room = await chatRoomService.findRoomById(roomId);
+
+      if (!room) {
+        return res.status(400).json({
+          success: false,
+          message: 'No room exists for this id'
+        });
+      }
+
       const messagePayload = {
         messageText
       };
@@ -66,8 +102,5 @@ export default {
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
     }
-  },
-  getRecentConversation: async (req, res) => {},
-  getConversationByRoomId: async (req, res) => {},
-  markConversationReadByRoomId: async (req, res) => {}
+  }
 };
