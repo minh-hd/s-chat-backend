@@ -66,10 +66,6 @@ async function findRoomById(roomId) {
   return room ? null : room;
 }
 
-// async function findConversationByRoom(roomId) {
-//   const room = await chatRoomModel.fin
-// }
-
 export default {
   findAvailableRoom,
   findRoomById,

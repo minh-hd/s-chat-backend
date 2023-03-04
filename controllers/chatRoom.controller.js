@@ -69,6 +69,12 @@ export default {
   getConversationByRoomId: async (req, res) => {
     try {
       const { roomId } = req.params;
+
+      const conversation = await chatMessageService.findMessagesByRoomId(
+        roomId
+      );
+
+      return res.status(200).json({ success: true, conversation });
     } catch (error) {
       return res.status(500).json({ success: false, error: error.message });
     }

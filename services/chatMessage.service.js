@@ -69,6 +69,12 @@ async function createPostInChatRoom(chatRoomId, message, postedByUser) {
   return aggregate[0];
 }
 
+/**
+ *
+ * @param {*} chatRoomId
+ * @param {*} currentUserOnlineId
+ * @returns
+ */
 async function markMessageAsRead(chatRoomId, currentUserOnlineId) {
   return chatMessageModel.updateMany(
     {
@@ -90,7 +96,14 @@ async function markMessageAsRead(chatRoomId, currentUserOnlineId) {
   );
 }
 
+async function findMessagesByRoomId(chatRoomId) {
+  const messages = await chatMessageModel.find({ chatRoomId }).limit(20).exec();
+
+  return messages ? messages : [];
+}
+
 export default {
   createPostInChatRoom,
-  markMessageAsRead
+  markMessageAsRead,
+  findMessagesByRoomId
 };
