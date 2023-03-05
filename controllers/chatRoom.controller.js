@@ -36,10 +36,11 @@ export default {
   },
   postMessage: async (req, res) => {
     try {
-      const { roomId } = req.params;
-      const { messageText } = req.body;
+      const { body, params } = req;
+      const { roomId } = params;
+      const { messageText } = body;
       const validation = makeValidation((types) => ({
-        payload: req.body,
+        payload: body,
         checks: {
           messageText: { type: types.string }
         }
@@ -51,8 +52,11 @@ export default {
 
       const { userId: currentLoggedUser } = req;
 
-      const readResult = await chatMessageService.markMessageAsRead(
+      const messagePayload = { messageText };
+
+      const readResult = await chatMessageService.createPostInChatRoom(
         roomId,
+        messagePayload,
         currentLoggedUser
       );
 
@@ -65,7 +69,33 @@ export default {
       return res.status(500).json({ success: false, error: error.message });
     }
   },
-  getRecentConversation: async (req, res) => {},
+  getRecentConversation: async (req, res) => {
+    try {
+      const { userId: currentLoggedUser } = req;
+
+      const options = {
+        page: parseInt(req.query.page) || 0,
+        limit: parseInt(req.query.limit) || 20
+      };
+
+      const rooms = await chatRoomService.findChatRoomsByUser(
+        currentLoggedUser
+      );
+
+      const roomIds = rooms.map((room) => room._id);
+
+      const recentConversation = await chatMessageService.getRecentConversation(
+        roomIds,
+        options
+      );
+
+      return res
+        .status(200)
+        .json({ success: true, conversation: recentConversation });
+    } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+    }
+  },
   getConversationByRoomId: async (req, res) => {
     try {
       const { roomId } = req.params;
