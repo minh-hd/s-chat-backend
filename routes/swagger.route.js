@@ -6,10 +6,10 @@ const router = express.Router();
 
 const options = {
   definition: {
-    openapi: '3.1.0',
+    openapi: '3.0.0',
     info: {
       title: 'S-Chat Express API with Swagger',
-      version: '0.1.0',
+      version: '2.0',
       description:
         'This is a chat application made with Express and documented with Swagger',
       license: {
@@ -19,15 +19,29 @@ const options = {
       contact: {
         name: 'MinhHD',
         url: 'https://minhhd.dev',
-        email: 'info@email.com'
+        email: 'work@minhhd.dev'
+      }
+    },
+    components: {
+      securitySchemes: {
+        Authorization: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          value: 'Bearer <JWT token here>'
+        }
       }
     }
   },
-  apis: ['./routes/*.route.js']
+  apis: ['./routes/*.route.js'],
+  schemes: ['http'],
+  consumes: ['application/json'],
+  produces: ['application/json']
 };
 
 const specs = swaggerJSDoc(options);
 
-router.get('/', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+router.use('/', swaggerUiExpress.serve);
+router.get('/', swaggerUiExpress.setup(specs));
 
 export default router;
